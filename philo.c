@@ -6,94 +6,72 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/14 11:23:49 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/16 17:41:32 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#	include "philo.h"
 
-void	free_philos(int all, t_philo	**philos)
+void	destroy_table(t_table *table)
 {
-	int	i;
-
-	i = -1;
-	if (!philos)
-		return ;
-	while (++i < all)
-		free(philos[i]);
-	free(philos);
-}
-
-void	create_philos(t_table *table)
-{
-	t_philo	**philos;
-	int		i;
-
-	i = -1;
-	philos = malloc(table->n_philos * sizeof(*philos));
-	if (!philos)
-		return ;
-	while (++i < table->n_philos)
+	if (table)
 	{
-		philos[i] = malloc(sizeof(*philos[i]));
-		if (!philos[i])
+		if (table->philos)
 		{
-			free_philos(i, philos);
-			return ;
+			usleep(10000);
+			free_philos(table->n_philos, table->philos);
+			free_forks(table->forks);
+			free_mutexes(table->n_philos, table->mutex);
+			free_threads(table->n_philos, table->threads);
+			pthread_mutex_destroy(&table->ids);
 		}
-		philos[i]->id = i;
+		free(table);
 	}
-	table->philos = philos;
 }
 
-int	ft_atoi(const char *str)
+void	*actions(void *arg)
 {
-	int			sign;
-	long long	value;
+	t_table		*table;
+	t_philo		*philo;
+	static int	i = -1;
 
-	sign = 1;
-	value = 0;
-	while (*str == '\t' || *str == '\n' || *str == '\v'
-		|| *str == '\f' || *str == '\r' || *str == ' ')
-		str++;
-	if (*str == '-' || *str == '+')
+	table = (t_table *)arg;
+	pthread_mutex_lock(&table->ids);
+	philo = table->philos[++i];
+	pthread_mutex_unlock(&table->ids);
+	while (philo->n_meals < table->n_rounds)
 	{
-		if (*str == '-')
-		sign = -1;
-		str++;
+		pthread_mutex_lock(&table->writes);
+		printf("%lu here\n", philo->id);
+		pthread_mutex_unlock(&table->writes);
+		philo->n_meals++;
 	}
-	while (*str >= '0' && *str <= '9')
-		value = value * 10 + (*str++ - '0');
-	if ((value * sign) > 2147483647 || (value * sign) < -2147483648)
-	{
-		if (sign == -1)
-			return (0);
-		return (-1);
-	}
-	return (value * sign);
+	return (0);
 }
 
-t_table *get_args(char **av)
+t_table	*get_args(char **av)
 {
-	t_table *table;
+	t_table	*table;
 
 	table = malloc(sizeof(*table));
 	if (!table)
-		return NULL;
+		return (NULL);
 	table->n_philos = ft_atoi(av[1]);
 	table->die_t = ft_atoi(av[2]);
 	table->eat_t = ft_atoi(av[3]);
 	table->sleep_t = ft_atoi(av[4]);
+	table->is_dead = 0;
 	if (av[5])
 		table->n_rounds = ft_atoi(av[5]);
 	else
 		table->n_rounds = -1;
+	table->threads = NULL;
 	return (table);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_table *table;
+	t_table	*table;
 
 	table = NULL;
 	if ((ac == 5 || (ac == 6 && ft_atoi(av[5]) > 0)) && ft_atoi(av[1]) > 0)
@@ -101,40 +79,14 @@ int main(int ac, char **av)
 		table = get_args(av);
 		if (!table)
 			return (0);
+		create_forks(table);
 		create_philos(table);
-		printf("%d\n", table->philos[0]->id);
+		pthread_mutex_init(&table->ids, NULL);
+		pthread_mutex_init(&table->writes, NULL);
+		init_philos(table);
+		destroy_table(table);
 	}
 	else
 		printf("Invalid Arguments\n");
-	if (table)
-	{
-		if (table->philos)
-			free_philos(table->n_philos, table->philos);
-		free(table);
-	}
 	return (0);
 }
-
-// pthread_mutex_t mutex;
-
-// void* thread_function(void)
-// {
-//     pthread_mutex_lock(&mutex);
-//     printf("Thread executing\n");
-//     pthread_mutex_unlock(&mutex);
-//     pthread_exit(NULL);
-// }
-
-// int main(void)
-// {
-//     pthread_t thread1;
-//     pthread_t thread2;
-
-//     pthread_mutex_init(&mutex, NULL);
-//     pthread_create(&thread1, NULL, thread_function, NULL);
-//     pthread_create(&thread2, NULL, thread_function, NULL);
-//     pthread_join(thread1, NULL);
-//     pthread_join(thread2, NULL);
-//     pthread_mutex_destroy(&mutex);
-//     return 0;
-// }

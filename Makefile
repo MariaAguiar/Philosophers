@@ -1,13 +1,13 @@
 NAME := philo
 CC := cc
 CFLAGS := -Wall -Wextra -Werror -g
-SRCS := philo.c
+SRCS := philo.c philo_allocs.c philo_frees.c libft.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME) : $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -pthread -o $(NAME)
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
