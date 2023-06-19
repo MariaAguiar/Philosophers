@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/16 17:36:49 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/19 16:55:18 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,16 @@
 
 typedef struct s_philo
 {
-	pthread_t		id;
-	int				n_meals;
-	pthread_mutex_t	*l_fork;
-	pthread_mutex_t	*r_fork;
+	pthread_t	id;
+	int			to_die;
+	int			n_meals;
+	int			*l_fork;
+	int			*r_fork;
 }	t_philo;
 
 typedef struct s_table
 {
-	int				n_philos;
+	unsigned long	n_philos;
 	int				die_t;
 	int				eat_t;
 	int				sleep_t;
@@ -44,6 +45,8 @@ typedef struct s_table
 
 // libft
 int		ft_atoi(const char *str);
+char	*ft_itoa(int n);
+size_t	ft_strlen(const char *s);
 
 // Frees
 void	free_philos(int all, t_philo	**philos);

@@ -6,26 +6,57 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/16 17:41:32 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/19 19:47:17 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	include "philo.h"
 
-void	destroy_table(t_table *table)
+void	writes(pthread_mutex_t *writes, int id, int message)
 {
-	if (table)
+	char *i;
+
+	i = ft_itoa(id);
+	pthread_mutex_lock(writes);
+	write(1, i, ft_strlen(i));
+	if (message == 'e')
+		write(1, " is eating\n", 11);
+	else if (message == 's')
+		write(1, " is sleeping\n", 13);
+	else if (message == 'f')
+		write(1, " has taken a fork\n", 18);
+	else if (message == 't')
+		write(1, " is thinking\n", 13);
+	else if (message == 'a')
+		write(1, " is about to die\n", 17);
+	else if (message == 'd')
+		write(1, " died\n", 6);
+	pthread_mutex_unlock(writes);
+	free(i);
+}
+
+void	release_right(t_table *table, t_philo *philo)
+{
+	pthread_mutex_lock(table->mutex[philo->id - 1]);
+	table->forks[philo->id] = 0;
+	philo->l_fork = NULL;
+	pthread_mutex_unlock(table->mutex[philo->id - 1]);
+}
+void	release_left(t_table *table, t_philo *philo)
+{
+	if (table->n_philos != philo->id)
 	{
-		if (table->philos)
-		{
-			usleep(10000);
-			free_philos(table->n_philos, table->philos);
-			free_forks(table->forks);
-			free_mutexes(table->n_philos, table->mutex);
-			free_threads(table->n_philos, table->threads);
-			pthread_mutex_destroy(&table->ids);
-		}
-		free(table);
+		pthread_mutex_lock(table->mutex[philo->id - 1]);
+		table->forks[philo->id + 1] = 0;
+		philo->r_fork = NULL;
+		pthread_mutex_unlock(table->mutex[philo->id - 1]);
+	}
+	if (table->n_philos == philo->id)
+	{
+		pthread_mutex_lock(table->mutex[0]);
+		table->forks[0] = 0;
+		philo->r_fork = NULL;
+		pthread_mutex_unlock(table->mutex[0]);
 	}
 }
 
@@ -36,15 +67,70 @@ void	*actions(void *arg)
 	static int	i = -1;
 
 	table = (t_table *)arg;
+	philo = NULL;
 	pthread_mutex_lock(&table->ids);
-	philo = table->philos[++i];
+	if (table->philos[++i])
+		philo = table->philos[i];
 	pthread_mutex_unlock(&table->ids);
-	while (philo->n_meals < table->n_rounds)
+	if (!philo)
+		return (0);
+	int e = 20;
+	while (--e > 0)
 	{
-		pthread_mutex_lock(&table->writes);
-		printf("%lu here\n", philo->id);
-		pthread_mutex_unlock(&table->writes);
-		philo->n_meals++;
+		if (philo->to_die < table->eat_t && \
+		philo->to_die > 0)
+			writes(&table->writes, philo->id, 'a');
+		if (philo->to_die == 0)
+			writes(&table->writes, philo->id, 'd');
+		if (philo->l_fork && philo->r_fork)
+			{
+				writes(&table->writes, philo->id, 'e');
+				philo->to_die = table->die_t;
+				release_left(table, philo);
+				release_right(table, philo);
+				writes(&table->writes, philo->id, 's');
+				if (usleep(table->sleep_t * 1000) == -1)
+					write(1, "Error\n", 6);
+				writes(&table->writes, philo->id, 't');
+				continue ;
+			}
+		else
+		{
+			if (!philo->l_fork)
+			{
+				if (table->n_philos != philo->id && table->forks[philo->id + 1] == 0)
+				{
+					pthread_mutex_lock(table->mutex[philo->id - 1]);
+					table->forks[philo->id + 1] = (int)philo->id;
+					philo->l_fork = &table->forks[philo->id + 1];
+					writes(&table->writes, philo->id, 'f');
+					pthread_mutex_unlock(table->mutex[philo->id - 1]);
+				}
+				if (table->n_philos == philo->id && table->forks[0] == 0)
+				{
+					pthread_mutex_lock(table->mutex[0]);
+					table->forks[0] = philo->id;
+					philo->l_fork = &table->forks[0];
+					writes(&table->writes, philo->id, 'f');
+					pthread_mutex_unlock(table->mutex[0]);
+				}
+			}
+			if (!philo->r_fork)
+			{
+				pthread_mutex_lock(table->mutex[philo->id - 1]);
+				if (table->forks[philo->id] == 0)
+				{
+					table->forks[philo->id] = philo->id;
+					philo->r_fork = &table->forks[philo->id];
+					writes(&table->writes, philo->id, 'f');
+				}
+				pthread_mutex_unlock(table->mutex[philo->id - 1]);
+			}
+			if (philo->r_fork && !philo->l_fork)
+				release_right(table, philo);
+			if (philo->l_fork && !philo->r_fork)
+				release_left(table, philo);
+		}
 	}
 	return (0);
 }

@@ -6,11 +6,21 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 15:51:40 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/16 15:52:04 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/19 16:00:41 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	include "philo.h"
+
+size_t	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
+}
 
 int	ft_atoi(const char *str)
 {
@@ -37,4 +47,48 @@ int	ft_atoi(const char *str)
 		return (-1);
 	}
 	return (value * sign);
+}
+
+static int	get_len(int n)
+{
+	int	len;
+
+	len = 0;
+	if (n <= 0)
+		len++;
+	while (n != 0)
+	{
+		len++;
+		n = n / 10;
+	}
+	return (len);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*s;
+	int		i;
+
+	i = get_len(n);
+	s = malloc(sizeof(char) * i + 1);
+	if (!s)
+		return (NULL);
+	s[0] = '0';
+	s[i] = '\0';
+	if (n == -2147483648)
+	{
+		s[--i] = '8';
+		n = n / 10;
+	}
+	if (n < 0)
+	{
+		s[0] = '-';
+		n = n * -1;
+	}
+	while (n > 0 && i > 0)
+	{
+		s[--i] = n % 10 + '0';
+		n = n / 10;
+	}
+	return (s);
 }

@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 10:37:05 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/16 17:13:07 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/19 19:04:32 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	init_philos(t_table *table)
 
 	i = -1;
 	table->threads = malloc(sizeof(pthread_t) * table->n_philos);
-	while (++i < table->n_philos)
+	while (++i < (int)table->n_philos)
 	{
 		if (pthread_create(&table->threads[i], NULL, &actions, table) != 0)
 			write(1, "nope!", 5);
@@ -34,7 +34,7 @@ void	create_philos(t_table *table)
 	philos = malloc(table->n_philos * sizeof(*philos));
 	if (!philos)
 		return ;
-	while (++i < table->n_philos)
+	while (++i < (int)table->n_philos)
 	{
 		philos[i] = malloc(sizeof(*philos[i]));
 		if (!philos[i])
@@ -42,11 +42,14 @@ void	create_philos(t_table *table)
 			free_philos(i, philos);
 			return ;
 		}
-		philos[i]->id = i;
+		philos[i]->id = i + 1;
+		philos[i]->to_die = table->die_t;
 		if (table->n_rounds == -1)
 			philos[i]->n_meals = -1;
 		else
 			philos[i]->n_meals = 0;
+		philos[i]->l_fork = NULL;
+		philos[i]->r_fork = NULL;
 	}
 	table->philos = philos;
 }
@@ -64,7 +67,7 @@ void	create_forks(t_table *table)
 	forks = malloc(table->n_philos * sizeof(forks));
 	if (!forks)
 		return ;
-	while (++i < table->n_philos)
+	while (++i < (int)table->n_philos)
 	{
 		mutex[i] = malloc(sizeof(*mutex[i]));
 		if (!mutex[i])
