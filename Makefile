@@ -1,7 +1,8 @@
 NAME := philo
-CC := cc
+CC := cc -fsanitize=thread
 CFLAGS := -Wall -Wextra -Werror -g
-SRCS := philo.c philo_allocs.c philo_frees.c libft.c
+SRCS := philo.c philo_allocs.c philo_frees.c \
+        philo_actions.c philo_libft.c philo_change.c
 OBJS := $(SRCS:.c=.o)
 
 all: $(NAME)
