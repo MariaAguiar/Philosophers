@@ -6,36 +6,42 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 19:48:29 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/20 21:51:15 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #	include "philo.h"
 
-void	*actions(void *arg)
+t_philo	*get_philo(t_table *table)
 {
-	t_table			*table;
-	t_philo			*philo;
-	static int		i = -1;
+	t_philo		*philo;
+	static int	i = -1;
 
 	philo = NULL;
-	table = (t_table *)arg;
 	pthread_mutex_lock(&table->ids);
 	if (++i < (int)table->n_philos)
 		philo = table->philos[i];
 	pthread_mutex_unlock(&table->ids);
+	return (philo);
+}
+
+void	*actions(void *arg)
+{
+	t_table			*table;
+	t_philo			*philo;
+
+	table = (t_table *)arg;
+	philo = get_philo(table);
 	if (!philo)
 		return (0);
-	if (table->n_philos == 1)
-		return (0);
 	// if (philo->id % 2)
-	// 	usleep(200);
+	// 	usleep(150);
 	while (1)
 	{
 		if (get_time() - philo->lastmeal > table->die_t)
 		{
 			writes(table, philo->id, 'd');
-			break ;
+			exit(1);
 		}
 		if (manage_forks(table, philo->id))
 		{
@@ -80,7 +86,6 @@ int	main(int ac, char **av)
 		create_forks(table);
 		pthread_mutex_init(&table->ids, NULL);
 		pthread_mutex_init(&table->writes, NULL);
-		pthread_mutex_init(&table->timer, NULL);
 		init_philos(table);
 		destroy_table(table);
 	}

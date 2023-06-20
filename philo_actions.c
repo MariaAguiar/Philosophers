@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:07:06 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 19:37:13 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/20 21:40:29 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	eating(t_table *table, unsigned long id)
 	writes(table, id, 't');
 }
 
-int	get_left_fork(t_table *table,const unsigned long id)
+int	get_left_fork(t_table *table, const unsigned long id)
 {
 	int	i;
 
@@ -42,7 +42,7 @@ int	get_left_fork(t_table *table,const unsigned long id)
 	{
 		if (pthread_mutex_lock(table->mutex[0]) == 0)
 		{
-			if(table->forks[0] == 0)
+			if (table->forks[0] == 0)
 			{
 				table->forks[0] = id;
 				i = 1;
@@ -55,10 +55,11 @@ int	get_left_fork(t_table *table,const unsigned long id)
 
 int	get_right_fork(t_table *table, const unsigned long id)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (pthread_mutex_lock(table->mutex[id - 1]) == 0 && table->forks[id - 1] == 0)
+	if (pthread_mutex_lock(table->mutex[id - 1]) == 0
+		&& table->forks[id - 1] == 0)
 	{
 		table->forks[id - 1] = id;
 		i = 1;

@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 19:46:29 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/20 21:40:17 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_table
 	pthread_mutex_t	**mutex;
 	pthread_mutex_t	ids;
 	pthread_mutex_t	writes;
-	pthread_mutex_t	timer;
 	pthread_t		*threads;
 }	t_table;
 
@@ -53,13 +52,13 @@ size_t	ft_strlen(const char *s);
 
 // Actions
 void	eating(t_table *table, unsigned long id);
-int		get_left_fork(t_table *table,const unsigned long id);
+int		get_left_fork(t_table *table, const unsigned long id);
 int		get_right_fork(t_table *table, const unsigned long id);
 void	release_left(t_table *table, const unsigned long id);
 void	release_right(t_table *table, const unsigned long id);
 
 // Change
-void	writes(t_table *table, int id, int message);
+void	writes(t_table *table, const int id, int message);
 t_philo	*get_philo_id(t_table *table, int i);
 int		manage_forks(t_table *table, int id);
 
