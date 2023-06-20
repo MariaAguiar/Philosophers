@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:07:06 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 21:40:29 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/20 22:28:13 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	eating(t_table *table, unsigned long id)
 	writes(table, id, 'e');
 	usleep(table->eat_t * 1000);
 	table->philos[id - 1]->lastmeal = get_time();
-	release_right(table, id);
 	release_left(table, id);
+	release_right(table, id);
 	writes(table, id, 's');
 	usleep(table->sleep_t * 1000);
 	writes(table, id, 't');
@@ -37,6 +37,8 @@ int	get_left_fork(t_table *table, const unsigned long id)
 			i = 1;
 			pthread_mutex_unlock(table->mutex[id]);
 		}
+		else
+			pthread_mutex_unlock(table->mutex[id]);
 	}
 	if (table->n_philos == id)
 	{
@@ -49,6 +51,8 @@ int	get_left_fork(t_table *table, const unsigned long id)
 			}
 			pthread_mutex_unlock(table->mutex[0]);
 		}
+		else
+			pthread_mutex_unlock(table->mutex[0]);
 	}
 	return (i);
 }
@@ -65,6 +69,8 @@ int	get_right_fork(t_table *table, const unsigned long id)
 		i = 1;
 		pthread_mutex_unlock(table->mutex[id - 1]);
 	}
+	else
+		pthread_mutex_unlock(table->mutex[id - 1]);
 	return (i);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 21:40:17 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/20 22:15:35 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ size_t	ft_strlen(const char *s);
 
 // Actions
 void	eating(t_table *table, unsigned long id);
+// int		get_forks(t_table *table, const unsigned long id);
 int		get_left_fork(t_table *table, const unsigned long id);
 int		get_right_fork(t_table *table, const unsigned long id);
 void	release_left(t_table *table, const unsigned long id);
