@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 14:39:03 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:14:34 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@ void	death_flag(t_table *table, unsigned int id)
 		table->is_dead = 1;
 	}
 	pthread_mutex_unlock(&table->death);
+}
+
+static int	check_death(t_table *table)
+{
+	pthread_mutex_lock(&table->death);
+	if (table->is_dead == 1)
+	{
+		pthread_mutex_unlock(&table->death);
+		return (0);
+	}
+	else
+		pthread_mutex_unlock(&table->death);
+	return (1);
 }
 
 t_philo	*get_philo(t_table *table)
@@ -46,17 +59,9 @@ void	*actions(void *arg)
 	if (!philo)
 		return (0);
 	// if (philo->id % 2)
-	// 	usleep(250);
-	while (1)
+	// 	usleep(150);
+	while (check_death(table))
 	{
-		pthread_mutex_lock(&table->death);
-		if (table->is_dead == 1)
-		{
-			pthread_mutex_unlock(&table->death);
-			break ;
-		}
-		else
-			pthread_mutex_unlock(&table->death);
 		if ((get_time() - philo->lastmeal) > table->die_t)
 		{
 			death_flag(table, philo->id);

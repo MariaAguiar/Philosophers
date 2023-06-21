@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 14:16:03 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:08:41 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	writes(t_table *table, int id, int message)
 {
-	char	*i;
-	char	*time;
-	static	int d = 0;
+	char		*i;
+	char		*time;
+	static int	d = 0;
 
 	i = ft_itoa(id);
 	time = ft_itoa(get_time() - table->start);

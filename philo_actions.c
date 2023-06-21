@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:07:06 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 15:00:29 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:17:54 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	ft_sleep(t_table *table, unsigned long id, const long long last)
 {
-	long start;
+	long	start;
 
 	start = get_time();
-	while(1)
+	while (1)
 	{
 		if (get_time() - start >= table->sleep_t)
 		{
 			writes(table, id, 't');
-			break;
+			break ;
 		}
 		if ((get_time() - last) > table->die_t)
 		{
@@ -43,6 +43,21 @@ void	eating(t_table *table, unsigned long id)
 	ft_sleep(table, id, table->philos[id - 1]->lastmeal);
 }
 
+int	get_nrzero(t_table *table, const unsigned long id)
+{
+	if (pthread_mutex_lock(table->mutex[0]) == 0 && table->forks[0] == 0)
+	{
+		table->forks[0] = id;
+		pthread_mutex_unlock(table->mutex[0]);
+		return (1);
+	}
+	else
+	{
+		pthread_mutex_unlock(table->mutex[0]);
+		return (0);
+	}
+}
+
 int	get_left_fork(t_table *table, const unsigned long id)
 {
 	if (table->n_philos != id)
@@ -60,19 +75,7 @@ int	get_left_fork(t_table *table, const unsigned long id)
 		}
 	}
 	else
-	{
-		if (pthread_mutex_lock(table->mutex[0]) == 0 && table->forks[0] == 0)
-		{
-			table->forks[0] = id;
-			pthread_mutex_unlock(table->mutex[0]);
-			return (1);
-		}
-		else
-		{
-			pthread_mutex_unlock(table->mutex[0]);
-			return (0);
-		}
-	}
+		return (get_nrzero(table, id));
 }
 
 int	get_right_fork(t_table *table, const unsigned long id)
