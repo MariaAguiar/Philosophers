@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:07:06 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:19:45 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 20:22:25 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ int	upd_meals(t_table *table, unsigned long id)
 	return (0);
 }
 
-void	ft_sleep(t_table *table, unsigned long id, const long long last, const char m)
+void	ft_sleep(t_table *table, unsigned long id, \
+const long long last, const char m)
 {
 	long	start;
 

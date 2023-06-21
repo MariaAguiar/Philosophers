@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:19:50 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 20:22:14 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ char	*ft_itoa(int n);
 size_t	ft_strlen(const char *s);
 
 // Actions
-void	ft_sleep(t_table *table, unsigned long id, const long long last, const char m);
+void	ft_sleep(t_table *table, unsigned long id, \
+const long long last, const char m);
 void	eating(t_table *table, unsigned long id);
 // int		get_forks(t_table *table, const unsigned long id);
 int		get_nrzero(t_table *table, const unsigned long id);
