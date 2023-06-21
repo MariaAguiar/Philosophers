@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 17:18:09 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 20:19:50 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,14 @@ typedef struct s_table
 	long long		eat_t;
 	long long		sleep_t;
 	int				n_rounds;
+	int				ok_meals;
 	int				is_dead;
 	int				*forks;
 	struct s_philo	**philos;
 	pthread_mutex_t	**mutex;
 	pthread_mutex_t	ids;
 	pthread_mutex_t	writes;
+	pthread_mutex_t	meals;
 	pthread_mutex_t	death;
 	pthread_t		*threads;
 }	t_table;
@@ -52,7 +54,7 @@ char	*ft_itoa(int n);
 size_t	ft_strlen(const char *s);
 
 // Actions
-void	ft_sleep(t_table *table, unsigned long id, const long long last);
+void	ft_sleep(t_table *table, unsigned long id, const long long last, const char m);
 void	eating(t_table *table, unsigned long id);
 // int		get_forks(t_table *table, const unsigned long id);
 int		get_nrzero(t_table *table, const unsigned long id);
@@ -62,7 +64,7 @@ void	release_left(t_table *table, const unsigned long id);
 void	release_right(t_table *table, const unsigned long id);
 
 // Change
-void	writes(t_table *table, const int id, int message);
+void	writes(t_table *table, const int id, const int m, char message);
 t_philo	*get_philo_id(t_table *table, int i);
 int		manage_forks(t_table *table, int id);
 
@@ -80,6 +82,7 @@ void	create_philos(t_table *table);
 void	create_forks(t_table *table);
 
 // Philos
+int		check_stop(t_table *table);
 void	death_flag(t_table *table, unsigned int id);
 t_table	*get_args(char **av);
 void	*actions(void *arg);

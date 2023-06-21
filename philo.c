@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 17:14:34 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 20:19:49 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ void	death_flag(t_table *table, unsigned int id)
 	pthread_mutex_lock(&table->death);
 	if (table->is_dead == 0)
 	{
-		writes(table, id, 'd');
+		writes(table, id, 0, 'd');
 		table->is_dead = 1;
 	}
 	pthread_mutex_unlock(&table->death);
 }
 
-static int	check_death(t_table *table)
+int	check_stop(t_table *table)
 {
 	pthread_mutex_lock(&table->death);
 	if (table->is_dead == 1)
@@ -32,7 +32,17 @@ static int	check_death(t_table *table)
 		return (0);
 	}
 	else
+	{
 		pthread_mutex_unlock(&table->death);
+		pthread_mutex_lock(&table->meals);
+		if (table->ok_meals == (int)table->n_philos && table->n_rounds > -1)
+		{
+			pthread_mutex_unlock(&table->meals);
+			return (0);
+		}
+		else
+			pthread_mutex_unlock(&table->meals);
+	}
 	return (1);
 }
 
@@ -60,7 +70,7 @@ void	*actions(void *arg)
 		return (0);
 	// if (philo->id % 2)
 	// 	usleep(150);
-	while (check_death(table))
+	while (check_stop(table))
 	{
 		if ((get_time() - philo->lastmeal) > table->die_t)
 		{
@@ -69,7 +79,7 @@ void	*actions(void *arg)
 		}
 		if (manage_forks(table, philo->id))
 		{
-			writes(table, philo->id, 'f');
+			writes(table, philo->id, 0, 'f');
 			eating(table, philo->id);
 		}
 	}
@@ -92,6 +102,7 @@ t_table	*get_args(char **av)
 		table->n_rounds = ft_atoi(av[5]);
 	else
 		table->n_rounds = -1;
+	table->ok_meals = 0;
 	table->threads = NULL;
 	return (table);
 }
@@ -111,6 +122,7 @@ int	main(int ac, char **av)
 		pthread_mutex_init(&table->ids, NULL);
 		pthread_mutex_init(&table->writes, NULL);
 		pthread_mutex_init(&table->death, NULL);
+		pthread_mutex_init(&table->meals, NULL);
 		init_philos(table);
 		destroy_table(table);
 	}

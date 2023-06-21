@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 10:37:05 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 14:21:07 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 20:19:46 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	create_philos(t_table *table)
 		if (table->n_rounds == -1)
 			philos[i]->n_meals = -1;
 		else
-			philos[i]->n_meals = 0;
+			philos[i]->n_meals = table->n_rounds;
 		// philos[i]->l_fork = NULL;
 		// philos[i]->r_fork = NULL;
 	}

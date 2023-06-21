@@ -6,13 +6,13 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 17:08:41 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 20:19:47 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	writes(t_table *table, int id, int message)
+void	writes(t_table *table, int id, const int m, char message)
 {
 	char		*i;
 	char		*time;
@@ -27,7 +27,11 @@ void	writes(t_table *table, int id, int message)
 		write(1, " ", 1);
 		write(1, i, ft_strlen(i));
 		if (message == 'e')
+		{
 			write(1, " is eating\n", 11);
+			if (d == 0)
+				d = m;
+		}
 		else if (message == 's')
 			write(1, " is sleeping\n", 13);
 		else if (message == 'f')
