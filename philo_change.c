@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 22:23:32 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:16:03 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,36 @@ void	writes(t_table *table, int id, int message)
 {
 	char	*i;
 	char	*time;
+	static	int d = 0;
 
 	i = ft_itoa(id);
 	time = ft_itoa(get_time() - table->start);
 	pthread_mutex_lock(&table->writes);
-	write(1, time, ft_strlen(time));
-	write(1, " ", 1);
-	write(1, i, ft_strlen(i));
-	if (message == 'e')
-		write(1, " is eating\n", 11);
-	else if (message == 's')
-		write(1, " is sleeping\n", 13);
-	else if (message == 'f')
+	if (d == 0)
 	{
-		write(1, " has taken a fork\n", 18);
 		write(1, time, ft_strlen(time));
 		write(1, " ", 1);
 		write(1, i, ft_strlen(i));
-		write(1, " has taken a fork\n", 18);
+		if (message == 'e')
+			write(1, " is eating\n", 11);
+		else if (message == 's')
+			write(1, " is sleeping\n", 13);
+		else if (message == 'f')
+		{
+			write(1, " has taken a fork\n", 18);
+			write(1, time, ft_strlen(time));
+			write(1, " ", 1);
+			write(1, i, ft_strlen(i));
+			write(1, " has taken a fork\n", 18);
+		}
+		else if (message == 't')
+			write(1, " is thinking\n", 13);
+		else if (message == 'd')
+		{
+			write(1, " died\n", 6);
+			d = 1;
+		}
 	}
-	else if (message == 't')
-		write(1, " is thinking\n", 13);
-	else if (message == 'd')
-		write(1, " died\n", 6);
 	pthread_mutex_unlock(&table->writes);
 	free(i);
 	free(time);
@@ -56,7 +63,7 @@ t_philo	*get_philo_id(t_table *table, int i)
 
 int	manage_forks(t_table *table, int id)
 {
-	if (id % 2 == 0)
+	if (id % 2 == 1)
 	{
 		if (get_left_fork(table, id))
 		{

@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 22:15:35 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 15:00:16 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_table
 	pthread_mutex_t	**mutex;
 	pthread_mutex_t	ids;
 	pthread_mutex_t	writes;
+	pthread_mutex_t	death;
 	pthread_t		*threads;
 }	t_table;
 
@@ -51,6 +52,7 @@ char	*ft_itoa(int n);
 size_t	ft_strlen(const char *s);
 
 // Actions
+void	ft_sleep(t_table *table, unsigned long id, const long long last);
 void	eating(t_table *table, unsigned long id);
 // int		get_forks(t_table *table, const unsigned long id);
 int		get_left_fork(t_table *table, const unsigned long id);
@@ -77,6 +79,7 @@ void	create_philos(t_table *table);
 void	create_forks(t_table *table);
 
 // Philos
+void	death_flag(t_table *table, unsigned int id);
 t_table	*get_args(char **av);
 void	*actions(void *arg);
 void	destroy_table(t_table *table);

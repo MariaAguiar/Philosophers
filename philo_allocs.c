@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 10:37:05 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/20 21:22:28 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 14:21:07 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	init_philos(t_table *table)
 	table->start = get_time();
 	while (++i < (int)table->n_philos)
 	{
+		table->philos[i]->lastmeal = get_time();
 		if (pthread_create(&table->threads[i], NULL, &actions, table) != 0)
 			write(1, "nope!", 5);
 	}
@@ -52,7 +53,7 @@ void	create_philos(t_table *table)
 			return ;
 		}
 		philos[i]->id = i + 1;
-		philos[i]->lastmeal = get_time();
+		philos[i]->lastmeal = 0;
 		if (table->n_rounds == -1)
 			philos[i]->n_meals = -1;
 		else
