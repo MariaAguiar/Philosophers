@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:19:49 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 21:37:50 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ void	*actions(void *arg)
 	philo = get_philo(table);
 	if (!philo)
 		return (0);
-	// if (philo->id % 2)
-	// 	usleep(150);
 	while (check_stop(table))
 	{
 		if ((get_time() - philo->lastmeal) > table->die_t)

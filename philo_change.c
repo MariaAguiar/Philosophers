@@ -6,53 +6,55 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:19:47 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 21:37:06 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+int	to_write(long long time, char * i, char message)
+{
+	if (message == 's')
+		printf("is sleeping\n");
+	else if (message == 'f')
+	{
+		printf("has taken a fork\n");
+		printf("%lld %s ", time, i);
+		printf("has taken a fork\n");
+	}
+	else if (message == 't')
+		printf("is thinking\n");
+	else if (message == 'd')
+	{
+		printf("died\n");
+		return(1);
+	}
+	return (0);
+}
+
 void	writes(t_table *table, int id, const int m, char message)
 {
 	char		*i;
-	char		*time;
+	long long	time;
 	static int	d = 0;
 
 	i = ft_itoa(id);
-	time = ft_itoa(get_time() - table->start);
 	pthread_mutex_lock(&table->writes);
+	time = get_time() - table->start;
 	if (d == 0)
 	{
-		write(1, time, ft_strlen(time));
-		write(1, " ", 1);
-		write(1, i, ft_strlen(i));
+		printf("%lld %s ", time, i);
 		if (message == 'e')
 		{
-			write(1, " is eating\n", 11);
+			printf("is eating\n");
 			if (d == 0)
 				d = m;
 		}
-		else if (message == 's')
-			write(1, " is sleeping\n", 13);
-		else if (message == 'f')
-		{
-			write(1, " has taken a fork\n", 18);
-			write(1, time, ft_strlen(time));
-			write(1, " ", 1);
-			write(1, i, ft_strlen(i));
-			write(1, " has taken a fork\n", 18);
-		}
-		else if (message == 't')
-			write(1, " is thinking\n", 13);
-		else if (message == 'd')
-		{
-			write(1, " died\n", 6);
-			d = 1;
-		}
+		else
+			d = to_write(time, i, message);
 	}
 	pthread_mutex_unlock(&table->writes);
 	free(i);
-	free(time);
 }
 
 t_philo	*get_philo_id(t_table *table, int i)
