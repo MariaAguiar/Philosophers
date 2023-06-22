@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:11:22 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:19:47 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:44:45 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	free_forks(int *forks)
 	free(forks);
 }
 
-void	free_mutexes(int all, pthread_mutex_t **mutex)
+void	free_mutexes(t_table *table, int all, pthread_mutex_t **mutex)
 {
 	int	i;
 
@@ -40,6 +40,7 @@ void	free_mutexes(int all, pthread_mutex_t **mutex)
 		return ;
 	while (++i < all)
 	{
+		pthread_mutex_destroy(&table->philos[i]->last);
 		pthread_mutex_destroy(mutex[i]);
 		free(mutex[i]);
 	}
@@ -65,7 +66,7 @@ void	destroy_table(t_table *table)
 		if (table->philos)
 		{
 			free_threads(table->n_philos, table->threads);
-			free_mutexes(table->n_philos, table->mutex);
+			free_mutexes(table, table->n_philos, table->mutex);
 			free_philos(table->n_philos, table->philos);
 			free_forks(table->forks);
 			pthread_mutex_destroy(&table->ids);

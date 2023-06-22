@@ -6,13 +6,13 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 21:37:06 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/21 22:31:07 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	to_write(long long time, char * i, char message)
+int	to_write(long long time, char *i, char message)
 {
 	if (message == 's')
 		printf("is sleeping\n");
@@ -27,7 +27,7 @@ int	to_write(long long time, char * i, char message)
 	else if (message == 'd')
 	{
 		printf("died\n");
-		return(1);
+		return (1);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 21:37:50 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:41:41 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,25 @@ void	death_flag(t_table *table, unsigned int id)
 		table->is_dead = 1;
 	}
 	pthread_mutex_unlock(&table->death);
+}
+
+int check_death(t_table *table)
+{
+	unsigned int	i;
+
+	i = -1;
+	while (++i < table->n_philos)
+	{
+		pthread_mutex_lock(&table->philos[i]->last);
+		if ((get_time() - table->philos[i]->lastmeal) > table->die_t)
+		{
+			death_flag(table, table->philos[i]->id);
+			pthread_mutex_unlock(&table->philos[i]->last);
+			return (0);
+		}
+		pthread_mutex_unlock(&table->philos[i]->last);
+	}
+	return (1);
 }
 
 int	check_stop(t_table *table)
@@ -59,6 +78,13 @@ t_philo	*get_philo(t_table *table)
 	return (philo);
 }
 
+// t_table	*get_table(void)
+// {
+// 	static t_table table;
+
+// 	return (&table);
+// }
+
 void	*actions(void *arg)
 {
 	t_table			*table;
@@ -70,11 +96,6 @@ void	*actions(void *arg)
 		return (0);
 	while (check_stop(table))
 	{
-		if ((get_time() - philo->lastmeal) > table->die_t)
-		{
-			death_flag(table, philo->id);
-			break ;
-		}
 		if (manage_forks(table, philo->id))
 		{
 			writes(table, philo->id, 0, 'f');

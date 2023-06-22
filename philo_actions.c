@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:07:06 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:22:25 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/22 19:07:01 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,23 @@ int	upd_meals(t_table *table, unsigned long id)
 	return (0);
 }
 
-void	ft_sleep(t_table *table, unsigned long id, \
-const long long last, const char m)
+void	ft_sleep(t_table *table, const long long time, \
+t_philo *philo, const char m)
 {
 	long	start;
 
 	start = get_time();
 	while (1)
 	{
-		if (get_time() - start >= table->sleep_t)
+		if (get_time() - start >= time)
 		{
 			if (m != ' ')
-				writes(table, id, 0, 't');
+				writes(table, philo->id, 0, 't');
 			break ;
 		}
-		if ((get_time() - last) > table->die_t)
+		if ((get_time() - philo->lastmeal) > table->die_t)
 		{
-			death_flag(table, id);
+			death_flag(table, philo->id);
 			break ;
 		}
 	}
@@ -61,12 +61,14 @@ const long long last, const char m)
 void	eating(t_table *table, unsigned long id)
 {
 	writes(table, id, upd_meals(table, id), 'e');
+	pthread_mutex_lock(&table->philos[id - 1]->last);
 	table->philos[id - 1]->lastmeal = get_time();
-	ft_sleep(table, id, table->philos[id - 1]->lastmeal, ' ');
+	pthread_mutex_unlock(&table->philos[id - 1]->last);
+	ft_sleep(table, table->eat_t, table->philos[id - 1], ' ');
 	release_left(table, id);
 	release_right(table, id);
 	writes(table, id, 0, 's');
-	ft_sleep(table, id, table->philos[id - 1]->lastmeal, 't');
+	ft_sleep(table, table->sleep_t, table->philos[id - 1], 't');
 }
 
 int	get_nrzero(t_table *table, const unsigned long id)

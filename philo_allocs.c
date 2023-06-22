@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 10:37:05 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:19:46 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:44:24 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,19 @@ void	init_philos(t_table *table)
 	table->start = get_time();
 	while (++i < (int)table->n_philos)
 	{
+		pthread_mutex_init(&table->philos[i]->last, NULL);
 		table->philos[i]->lastmeal = get_time();
 		if (pthread_create(&table->threads[i], NULL, &actions, table) != 0)
 			write(1, "nope!", 5);
+	}
+	if (table->n_philos > 1)
+	{
+		while (1)
+		{
+			if (check_death(table))
+				break ;
+			// usleep(1000);
+		}
 	}
 }
 
@@ -97,7 +107,7 @@ void	create_forks(t_table *table)
 		mutex[i] = malloc(sizeof(*mutex[i]));
 		if (!mutex[i])
 		{
-			free_mutexes(i, mutex);
+			free_mutexes(table, i, mutex);
 			return ;
 		}
 		forks[i] = 0;

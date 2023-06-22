@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/21 20:22:14 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/22 19:07:22 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_philo
 	unsigned long	id;
 	long long		lastmeal;
 	int				n_meals;
+	pthread_mutex_t last;
 	// pthread_mutex_t	*l_fork;
 	// pthread_mutex_t	*r_fork;
 }	t_philo;
@@ -54,8 +55,8 @@ char	*ft_itoa(int n);
 size_t	ft_strlen(const char *s);
 
 // Actions
-void	ft_sleep(t_table *table, unsigned long id, \
-const long long last, const char m);
+void	ft_sleep(t_table *table, const long long time, \
+t_philo *philo, const char m);
 void	eating(t_table *table, unsigned long id);
 // int		get_forks(t_table *table, const unsigned long id);
 int		get_nrzero(t_table *table, const unsigned long id);
@@ -71,7 +72,7 @@ int		manage_forks(t_table *table, int id);
 
 // Frees
 void	free_philos(int all, t_philo **philos);
-void	free_mutexes(int all, pthread_mutex_t **mutex);
+void	free_mutexes(t_table *table, int all, pthread_mutex_t **mutex);
 void	free_forks(int *forks);
 void	free_threads(int all, pthread_t *threads);
 
@@ -85,6 +86,7 @@ void	create_forks(t_table *table);
 // Philos
 int		check_stop(t_table *table);
 void	death_flag(t_table *table, unsigned int id);
+int 	check_death(t_table *table);
 t_table	*get_args(char **av);
 void	*actions(void *arg);
 void	destroy_table(t_table *table);
