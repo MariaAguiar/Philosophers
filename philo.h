@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 15:54:06 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 19:45:49 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_table
 	pthread_mutex_t	writes;
 	pthread_mutex_t	meals;
 	pthread_mutex_t	death;
+	pthread_mutex_t	time;
 	pthread_t		*threads;
 }	t_table;
 
@@ -86,7 +87,7 @@ long	get_time(void);
 t_philo	*get_philo(t_table *table);
 int		upd_meals(t_table *table, unsigned long id);
 void	ft_sleep(t_table *table, const long long time, \
-t_philo *philo, const char m);
+unsigned long id, const char m);
 
 // Philo
 void	eating(t_table *table, unsigned long id);

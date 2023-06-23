@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 17:22:46 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 19:55:43 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	eating(t_table *table, unsigned long id)
 	pthread_mutex_lock(&table->philos[id - 1]->last);
 	table->philos[id - 1]->lastmeal = get_time();
 	pthread_mutex_unlock(&table->philos[id - 1]->last);
-	ft_sleep(table, table->eat_t, table->philos[id - 1], 'e');
+	ft_sleep(table, table->eat_t, id, 'e');
 	release_forks(table, id);
 	writes(table, id, 0, 's');
-	ft_sleep(table, table->sleep_t, table->philos[id - 1], 't');
+	ft_sleep(table, table->sleep_t, id, 't');
 }
 
 void	*actions(void *arg)
@@ -70,8 +70,18 @@ t_table	*get_args(char **av)
 int	main(int ac, char **av)
 {
 	t_table	*table;
+	int		i;
 
 	table = NULL;
+	i = 0;
+	while (av[++i])
+	{
+		if (ft_atoi(av[i]) < 0)
+		{
+			printf("Invalid Arguments\n");
+			return(0);
+		}
+	}
 	if ((ac == 5 || (ac == 6 && ft_atoi(av[5]) > 0)) && ft_atoi(av[1]) > 0)
 	{
 		table = get_args(av);

@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 10:52:37 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 17:29:29 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 19:49:33 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 long	get_time(void)
 {
-	static struct timeval	tv;
+	struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * 1000LL + tv.tv_usec / 1000));
@@ -60,7 +60,7 @@ int	upd_meals(t_table *table, unsigned long id)
 }
 
 void	ft_sleep(t_table *table, const long long time, \
-t_philo *philo, const char m)
+unsigned long id, const char m)
 {
 	long	start;
 
@@ -70,7 +70,7 @@ t_philo *philo, const char m)
 		if (get_time() - start >= time)
 		{
 			if (m == 't')
-				writes(table, philo->id, 0, 't');
+				writes(table, id, 0, 't');
 			break ;
 		}
 	}
