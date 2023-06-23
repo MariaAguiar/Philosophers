@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 10:52:37 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 16:58:13 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:29:29 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,6 @@ t_philo *philo, const char m)
 		{
 			if (m == 't')
 				writes(table, philo->id, 0, 't');
-			break ;
-		}
-		if ((get_time() - philo->lastmeal) > table->die_t)
-		{
-			death_flag(table, philo->id);
 			break ;
 		}
 	}
