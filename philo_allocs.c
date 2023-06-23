@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 10:37:05 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 14:52:28 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:06:59 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,14 @@ void	init_philos(t_table *table)
 		pthread_mutex_init(&table->philos[i]->last, NULL);
 		if (pthread_create(&table->threads[i], NULL, &actions, table) != 0)
 			write(1, "nope!", 5);
+	}
+	if (table->n_philos > 1)
+	{
+		while (1)
+		{
+			if (check_death(table))
+				break ;
+		}
 	}
 }
 

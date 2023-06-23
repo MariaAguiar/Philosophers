@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 10:48:55 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 11:58:33 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:05:18 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ int	check_stop(t_table *table)
 			pthread_mutex_unlock(&table->meals);
 			return (0);
 		}
-		else
-			pthread_mutex_unlock(&table->meals);
+		pthread_mutex_unlock(&table->meals);
 	}
 	return (1);
 }

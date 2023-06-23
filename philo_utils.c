@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 15:54:18 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:51:41 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,14 @@ int	to_write(char message)
 
 void	writes(t_table *table, int id, const int m, char message)
 {
-	char		*i;
 	long long	time;
 	static int	d = 0;
 
-	i = ft_itoa(id);
 	pthread_mutex_lock(&table->writes);
 	time = get_time() - table->start;
 	if (d == 0)
 	{
-		printf("%lld %s ", time, i);
+		printf("%lld %d ", time, id);
 		if (message == 'e')
 		{
 			printf("is eating\n");
@@ -50,7 +48,6 @@ void	writes(t_table *table, int id, const int m, char message)
 			d = to_write(message);
 	}
 	pthread_mutex_unlock(&table->writes);
-	free(i);
 }
 
 t_philo	*get_philo_id(t_table *table, int i)
