@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:11:22 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 11:58:32 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 14:54:36 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	free_threads(int all, pthread_t *threads)
 	free(threads);
 }
 
-void	free_forks(int *forks)
+void	free_forks(unsigned long *forks)
 {
 	if (!forks)
 		return ;

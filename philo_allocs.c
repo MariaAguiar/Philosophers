@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 10:37:05 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 11:58:34 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 14:52:28 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ void	init_philos(t_table *table)
 		if (pthread_create(&table->threads[i], NULL, &actions, table) != 0)
 			write(1, "nope!", 5);
 	}
-	// while (1)
-	// {
-	// 	if (check_death(table))
-	// 		break ;
-	// }
 }
 
 void	create_philos(t_table *table)
@@ -63,7 +58,7 @@ void	create_philos(t_table *table)
 void	create_forks(t_table *table)
 {
 	pthread_mutex_t	**mutex;
-	int				*forks;
+	unsigned long	*forks;
 	unsigned long	i;
 
 	i = -1;

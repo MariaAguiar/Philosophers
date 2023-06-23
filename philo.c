@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 12:19:11 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:53:59 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	eating(t_table *table, unsigned long id)
 	table->philos[id - 1]->lastmeal = get_time();
 	pthread_mutex_unlock(&table->philos[id - 1]->last);
 	ft_sleep(table, table->eat_t, table->philos[id - 1], 'e');
-	release_left(table, id);
-	release_right(table, id);
+	release_forks(table, id);
 	writes(table, id, 0, 's');
 	ft_sleep(table, table->sleep_t, table->philos[id - 1], 't');
 }
@@ -42,10 +41,7 @@ void	*actions(void *arg)
 			break ;
 		}
 		if (manage_forks(table, philo->id))
-		{
-			writes(table, philo->id, 0, 'f');
 			eating(table, philo->id);
-		}
 	}
 	return (0);
 }

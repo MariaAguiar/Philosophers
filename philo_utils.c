@@ -6,22 +6,18 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 11:58:28 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 15:54:18 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	to_write(long long time, char *i, char message)
+int	to_write(char message)
 {
 	if (message == 's')
 		printf("is sleeping\n");
 	else if (message == 'f')
-	{
 		printf("has taken a fork\n");
-		printf("%lld %s ", time, i);
-		printf("has taken a fork\n");
-	}
 	else if (message == 't')
 		printf("is thinking\n");
 	else if (message == 'd')
@@ -51,7 +47,7 @@ void	writes(t_table *table, int id, const int m, char message)
 				d = m;
 		}
 		else
-			d = to_write(time, i, message);
+			d = to_write(message);
 	}
 	pthread_mutex_unlock(&table->writes);
 	free(i);
@@ -69,14 +65,17 @@ t_philo	*get_philo_id(t_table *table, int i)
 
 int	manage_forks(t_table *table, int id)
 {
-	if (id % 2 == 1)
+	if (id % 2 != 0)
 	{
 		if (get_left_fork(table, id))
 		{
-			if (get_right_fork(table, id))
-				return (1);
+			if (table->n_philos > 1)
+			{
+				if (get_right_fork(table, id))
+					return (1);
+			}
 			else
-				release_left(table, id);
+				pthread_mutex_unlock(table->mutex[id - 1]);
 		}
 	}
 	else
@@ -85,8 +84,6 @@ int	manage_forks(t_table *table, int id)
 		{
 			if (get_left_fork(table, id))
 				return (1);
-			else
-				release_right(table, id);
 		}
 	}
 	return (0);

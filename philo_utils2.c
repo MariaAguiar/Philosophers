@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 10:52:37 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 11:58:28 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/23 13:47:00 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,31 +80,3 @@ t_philo *philo, const char m)
 		}
 	}
 }
-
-// void	ft_sleep(t_table *table, const long long time, \
-// t_philo *philo, const char m)
-// {
-	// long	start;
-	// start = get_time();
-	// if (table->die_t - time < 10)
-	// {
-	// usleep(time * 1000);
-	// if (m != ' ')
-	// 	writes(table, philo->id, 0, 't');
-		// return ;
-	// }
-	// while (1)
-	// {
-	// 	if (get_time() - start >= time)
-	// 	{
-	// 		if (m != ' ')
-	// 			writes(table, philo->id, 0, 't');
-	// 		break ;
-	// 	}
-	// 	if ((get_time() - philo->lastmeal) > table->die_t)
-	// 	{
-	// 		death_flag(table, philo->id);
-	// 		break ;
-	// 	}
-	// }
-// }
