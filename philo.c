@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
+/*   By: margarida <margarida@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 16:17:08 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 19:55:43 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/24 11:31:14 by margarida        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,22 +67,32 @@ t_table	*get_args(char **av)
 	return (table);
 }
 
-int	main(int ac, char **av)
+static int	check_input(char **av)
 {
-	t_table	*table;
-	int		i;
+	int	i;
+	int	f;
 
-	table = NULL;
 	i = 0;
 	while (av[++i])
 	{
-		if (ft_atoi(av[i]) < 0)
+		f = -1;
+		while (av[i][++f])
 		{
-			printf("Invalid Arguments\n");
-			return(0);
+			if (av[i][f] < '0' || av[i][f] > '9')
+				return (0);
 		}
+		if (ft_atoi(av[i]) < 1)
+			return (0);
 	}
-	if ((ac == 5 || (ac == 6 && ft_atoi(av[5]) > 0)) && ft_atoi(av[1]) > 0)
+	return (1);
+}
+
+int	main(int ac, char **av)
+{
+	t_table	*table;
+
+	table = NULL;
+	if (check_input(av) && (ac == 5 || ac == 6))
 	{
 		table = get_args(av);
 		if (!table)

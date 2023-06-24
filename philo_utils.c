@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
+/*   By: margarida <margarida@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 14:11:01 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 19:46:26 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/24 11:34:18 by margarida        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,33 @@ void	writes(t_table *table, int id, const int m, char message)
 			d = to_write(message);
 	}
 	pthread_mutex_unlock(&table->writes);
+}
+
+int	ft_atoi(const char *str)
+{
+	int			sign;
+	long long	value;
+
+	sign = 1;
+	value = 0;
+	while (*str == '\t' || *str == '\n' || *str == '\v'
+		|| *str == '\f' || *str == '\r' || *str == ' ')
+		str++;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+		sign = -1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+		value = value * 10 + (*str++ - '0');
+	if ((value * sign) > 2147483647 || (value * sign) < -2147483648)
+	{
+		if (sign == -1)
+			return (0);
+		return (-1);
+	}
+	return (value * sign);
 }
 
 t_philo	*get_philo_id(t_table *table, int i)

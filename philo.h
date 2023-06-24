@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
+/*   By: margarida <margarida@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 19:45:49 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/24 11:35:46 by margarida        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,10 @@ void	free_forks(unsigned long *forks);
 void	free_threads(int all, pthread_t *threads);
 void	destroy_table(t_table *table);
 
-// libft
-int		ft_atoi(const char *str);
-char	*ft_itoa(int n);
-size_t	ft_strlen(const char *s);
-
 // Utils
 int		to_write(char message);
 void	writes(t_table *table, const int id, const int m, char message);
+int		ft_atoi(const char *str);
 t_philo	*get_philo_id(t_table *table, int i);
 int		manage_forks(t_table *table, int id);
 
