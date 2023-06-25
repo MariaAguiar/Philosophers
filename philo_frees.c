@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 17:11:22 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 14:54:36 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/25 16:10:58 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	destroy_table(t_table *table)
 			free_philos(table->n_philos, table->philos);
 			free_forks(table->forks);
 			pthread_mutex_destroy(&table->ids);
+			pthread_mutex_destroy(&table->meals);
 		}
 		free(table);
 	}
