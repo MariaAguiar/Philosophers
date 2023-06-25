@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: margarida <margarida@student.42.fr>        +#+  +:+       +#+        */
+/*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 15:44:34 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/24 11:35:46 by margarida        ###   ########.fr       */
+/*   Updated: 2023/06/25 16:17:34 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ typedef struct s_table
 	pthread_mutex_t	writes;
 	pthread_mutex_t	meals;
 	pthread_mutex_t	death;
-	pthread_mutex_t	time;
 	pthread_t		*threads;
 }	t_table;
 
