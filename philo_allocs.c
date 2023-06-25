@@ -6,7 +6,7 @@
 /*   By: mnascime <mnascime@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 10:37:05 by mnascime          #+#    #+#             */
-/*   Updated: 2023/06/23 19:45:22 by mnascime         ###   ########.fr       */
+/*   Updated: 2023/06/25 17:59:15 by mnascime         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	init_philos(t_table *table)
 
 	i = -1;
 	table->threads = malloc(sizeof(pthread_t) * table->n_philos);
+	if (!table->threads)
+		return ;
 	table->start = get_time();
 	while (++i < (int)table->n_philos)
 	{
